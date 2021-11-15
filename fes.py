@@ -6,6 +6,7 @@ These events are sorted by the time of occurrence.
 """
 
 import heapq
+from event import Event
 
 class FES:
     '''
@@ -17,7 +18,7 @@ class FES:
     def __init__ (self) -> None:
         self.events = []
 
-    def add(self, event: object) -> None:
+    def add(self, event: Event) -> None:
         '''
         Add new events (arrivals or departures) to the FES
 
@@ -35,7 +36,7 @@ class FES:
         '''
         heapq.heappush(self.events, event)
 
-    def next(self) -> object:
+    def next(self) -> Event:
         '''
         Returns
         -------

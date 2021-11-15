@@ -18,7 +18,7 @@ class Simulation:
     '''
     Simulates a GGc queuing system
     '''
-    def __init__(self, arr_dist: object, serv_dist: object, nr_servers: int) -> None:
+    def __init__(self, arr_dist: Distribution, serv_dist: Distribution, nr_servers: int) -> None:
         '''
         Parameters
         ----------
@@ -40,7 +40,7 @@ class Simulation:
         self.serv_dist = serv_dist
         self.nr_servers = nr_servers
 
-    def simulate(self, sim_time: int) -> object:
+    def simulate(self, sim_time: int) -> SimResults:
         '''
         Parameters
         ----------
@@ -56,7 +56,6 @@ class Simulation:
         '''
         queue = 0 # current number of customers
         time = 0 # current time
-        #truck = Truck()
         results = SimResults()
         fes = FES()
         first_event = Event(Event.ARRIVAL, self.arr_dist.rvs())
@@ -67,21 +66,26 @@ class Simulation:
             time = event.time # update the time
             print(time)
             results.register_queue_length(time, queue) # register the queue length
-            if event.type == Event.ARRIVAL : # if event is an arrival :
-                queue += 1 # increase queue length
-                if queue <= self.nr_servers : # there is an available server
+            
+            # Arrivals
+            if event.type == Event.ARRIVAL: 
+                queue += 1 
+                if queue <= self.nr_servers: # there is an available server
                     dep = Event(Event.DEPARTURE, time + self.serv_dist.rvs())
                     fes.add(dep)
                 arr = Event(Event.ARRIVAL, time + self.arr_dist.rvs())
                 fes.add(arr) # schedule next arrival
-            elif event.type == Event.DEPARTURE : # event is departure
-                queue -= 1 # decrease queue length
+            
+            # Departures
+            elif event.type == Event.DEPARTURE: 
+                queue -= 1 
                 if queue >= self.nr_servers : # someone is waiting for service
                     dep = Event(Event.DEPARTURE, time + self.serv_dist.rvs())
                     fes.add(dep)
+                    
         return results
 
-def main(sim_time: int) -> object:
+def main(sim_time: int) -> SimResults:
     '''
 
     Parameters
