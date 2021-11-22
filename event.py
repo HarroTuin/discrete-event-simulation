@@ -17,15 +17,14 @@ class Event:
     ARRIVAL = 0 # constant for arrival type
     DEPARTURE = 1 # constant for departure type
 
-    def __init__(self, type_ : int, time: float) -> None:
+    def __init__(self, type_: int, time: float) -> None:
         '''
         Parameters
         ----------
         type_ : int
-            Type of arrival (arrival or departure), underscore is used because
-            type is a reserved namespace
+            Type of arrival (arrival or departure)
         time : float
-            The time the event is taking place.
+            The time the event is taking place
 
         Returns
         -------

@@ -49,37 +49,33 @@ class Simulation:
 
         Returns
         -------
-        object
-            results object from the SimResults() class that can be used to
-            extract meaningful results from the simulation such as queue lenght.
+        SimResults
+            object from the SimResults() class that can be used to
+            extract meaningful results from the simulation
 
         '''
-        queue = 0 # current number of customers
-        time = 0 # current time
+        queue = 0 
+        time = 0
         results = SimResults()
         fes = FES()
         first_event = Event(Event.ARRIVAL, self.arr_dist.rvs())
         fes.add(first_event)
         while time < sim_time:
-            print(queue)
-            event = fes.next() # jump to next event
-            time = event.time # update the time
-            print(time)
-            results.register_queue_length(time, queue) # register the queue length
+            event = fes.next()
+            time = event.time 
+            results.register_queue_length(time, queue)
             
-            # Arrivals
             if event.type == Event.ARRIVAL: 
                 queue += 1 
-                if queue <= self.nr_servers: # there is an available server
+                if queue <= self.nr_servers:
                     dep = Event(Event.DEPARTURE, time + self.serv_dist.rvs())
                     fes.add(dep)
-                arr = Event(Event.ARRIVAL, time + self.arr_dist.rvs())
-                fes.add(arr) # schedule next arrival
+                arrival = Event(Event.ARRIVAL, time + self.arr_dist.rvs())
+                fes.add(arrival) 
             
-            # Departures
             elif event.type == Event.DEPARTURE: 
                 queue -= 1 
-                if queue >= self.nr_servers : # someone is waiting for service
+                if queue >= self.nr_servers:
                     dep = Event(Event.DEPARTURE, time + self.serv_dist.rvs())
                     fes.add(dep)
                     
@@ -101,13 +97,9 @@ def main(sim_time: int) -> SimResults:
 
     '''
 
-    arr_dist = Distribution(stats.expon(scale = 1/5.0)) # we expect 5 arrival p/h
-    serv_dist = Distribution(stats.expon(scale = 1/1.0)) # we can process 1 arrival p/h per server
-
-    # Intialize simulator
+    arr_dist = Distribution(stats.expon(scale = 1/5.0)) # 5 arrivals p/h
+    serv_dist = Distribution(stats.expon(scale = 1/1.0)) # process 1 arrival p/h per server
     sim = Simulation(arr_dist, serv_dist, nr_servers = 3)
-
-    # Simulate for "sim_time" timesteps
     results = sim.simulate(sim_time = sim_time)
 
     return results

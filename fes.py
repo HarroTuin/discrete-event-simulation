@@ -24,7 +24,7 @@ class FES:
 
         Parameters
         ----------
-        event : List[object]
+        event : Event
             The event argument is an event object that contains information
             on the type and time of the event (arrival/departure)
 
@@ -40,8 +40,8 @@ class FES:
         '''
         Returns
         -------
-        object
-            Returns the next events (the event with the closest next arrival
+        Event
+            Returns the next event (the event with the closest next arrival
                                      time).
 
         '''

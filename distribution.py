@@ -58,14 +58,17 @@ class Distribution:
             rs = self.random_numbers[self.idx:(self.idx+n)]
         self.idx += n
         return rs
-
-    def mean(self):
+    
+    @property
+    def mean(self) -> float:
         return self.dist.mean()
-
-    def std(self):
+    
+    @property
+    def std(self) -> float:
         return self.dist.std()
-
-    def var(self):
+    
+    @property
+    def var(self) -> float:
         return self.dist.var()
 
     def cdf(self, x):
